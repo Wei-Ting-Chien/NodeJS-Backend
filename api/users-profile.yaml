@@ -1,0 +1,201 @@
+paths:
+  /users/profile:
+    get:
+      tags:
+        - User Management
+      summary: Get User Profile
+      description: Get current user's profile information (requires authentication)
+      operationId: getUserProfile
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      username:
+                        type: string
+                        example: 'johndoe'
+                      email:
+                        type: string
+                        example: 'johndoe@demo.com'
+                      age:
+                        type: integer
+                        example: 25
+                      city:
+                        type: string
+                        example: 'Taipei'
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-08-01T10:00:00.000Z'
+                required:
+                  - success
+                  - data
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '未授權的存取'
+                required:
+                  - success
+                  - message
+        '404':
+          description: Not found - User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '用戶不存在'
+                required:
+                  - success
+                  - message
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '伺服器內部錯誤'
+                required:
+                  - success
+                  - message
+    put:
+      tags:
+        - User Management
+      summary: Update User Profile
+      description: Update current user's profile information (requires authentication)
+      operationId: updateUserProfile
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                age:
+                  type: integer
+                  minimum: 1
+                  maximum: 150
+                  description: User age (optional)
+                  example: 30
+                city:
+                  type: string
+                  maxLength: 100
+                  description: User city (optional)
+                  example: 'Taipei'
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: '個人資料更新成功'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      username:
+                        type: string
+                        example: 'johndoe'
+                      age:
+                        type: integer
+                        example: 30
+                      city:
+                        type: string
+                        example: 'Taipei'
+                required:
+                  - success
+                  - message
+                  - data
+        '400':
+          description: Bad request - Invalid format or validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '請求格式錯誤: 年齡不能超過 150'
+                required:
+                  - success
+                  - message
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '未授權的存取'
+                required:
+                  - success
+                  - message
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '伺服器內部錯誤'
+                required:
+                  - success
+                  - message

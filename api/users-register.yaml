@@ -1,0 +1,132 @@
+paths:
+  /users/register:
+    post:
+      tags:
+        - User Management
+      summary: User Registration
+      description: Register a new user with username, password, and email. Optional fields include age and city.
+      operationId: registerUser
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - email
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                  description: Unique username for the account (minimum 3 characters)
+                  example: 'johndoe'
+                password:
+                  type: string
+                  minLength: 6
+                  maxLength: 12
+                  description: Password (6-12 characters)
+                  example: '1qazxsw23edcvfr4'
+                email:
+                  type: string
+                  format: email
+                  description: Unique email address
+                  example: 'johndoe@demo.com'
+                age:
+                  type: integer
+                  minimum: 1
+                  maximum: 150
+                  description: User age (optional)
+                  example: 25
+                city:
+                  type: string
+                  maxLength: 100
+                  description: User city (optional)
+                  example: 'Taipei'
+      responses:
+        '201':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: '註冊成功'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      username:
+                        type: string
+                        example: 'johndoe'
+                      email:
+                        type: string
+                        example: 'johndoe@demo.com'
+                      age:
+                        type: integer
+                        example: 25
+                      city:
+                        type: string
+                        example: 'Taipei'
+                required:
+                  - success
+                  - message
+                  - data
+        '400':
+          description: Bad request - Invalid format or missing required fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '請求格式錯誤: 用戶名至少需要 3 個字符'
+                required:
+                  - success
+                  - message
+        '409':
+          description: Conflict - Username or email already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '帳號已存在'
+                required:
+                  - success
+                  - message
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '伺服器內部錯誤'
+                required:
+                  - success
+                  - message

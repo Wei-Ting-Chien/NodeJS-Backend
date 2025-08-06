@@ -1,0 +1,154 @@
+paths:
+  /users/{userId}/liked-posts:
+    get:
+      tags:
+        - User Management
+      summary: Get User's Liked Posts
+      description: Get all posts that a specific user has liked
+      operationId: getUserLikedPosts
+      security: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: integer
+          example: 1
+        - name: limit
+          in: query
+          required: false
+          description: Number of posts to return (default: 10, max: 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          example: 10
+        - name: offset
+          in: query
+          required: false
+          description: Number of posts to skip (default: 0)
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          example: 0
+      responses:
+        '200':
+          description: Liked posts retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: '取得用戶按讚貼文成功'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        post_id:
+                          type: integer
+                          example: 1
+                        user_id:
+                          type: integer
+                          example: 1
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: '2025-08-01T10:15:00.000Z'
+                        updated_at:
+                          type: string
+                          format: date-time
+                          example: '2025-08-01T10:15:00.000Z'
+                        post:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 1
+                            user_id:
+                              type: integer
+                              example: 1
+                            content:
+                              type: string
+                              example: 'Hello, this is my first post!'
+                            created_at:
+                              type: string
+                              format: date-time
+                              example: '2025-08-01T10:00:00.000Z'
+                            updated_at:
+                              type: string
+                              format: date-time
+                              example: '2025-08-01T10:00:00.000Z'
+                  pagination:
+                    type: object
+                    properties:
+                      limit:
+                        type: integer
+                        example: 10
+                      offset:
+                        type: integer
+                        example: 0
+                required:
+                  - success
+                  - message
+                  - data
+                  - pagination
+        '400':
+          description: Bad request - Invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '路徑參數錯誤: UserId必須是數字'
+                required:
+                  - success
+                  - message
+        '404':
+          description: Not found - User does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '用戶不存在'
+                required:
+                  - success
+                  - message
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '伺服器內部錯誤'
+                required:
+                  - success
+                  - message 

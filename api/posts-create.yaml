@@ -1,0 +1,107 @@
+paths:
+  /posts:
+    post:
+      tags:
+        - Post Management
+      summary: Create Post
+      description: Create a new post (requires authentication)
+      operationId: createPost
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  minLength: 1
+                  maxLength: 300
+                  description: Post content (maximum 300 characters)
+                  example: 'Hello, this is my first post!'
+      responses:
+        '201':
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: '貼文發佈成功'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      content:
+                        type: string
+                        example: 'Hello, this is my first post!'
+                      user_id:
+                        type: integer
+                        example: 1
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-08-01T10:00:00.000Z'
+                required:
+                  - success
+                  - message
+                  - data
+        '400':
+          description: Bad request - Invalid format or validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '請求格式錯誤: 貼文內容不能為空'
+                required:
+                  - success
+                  - message
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '未授權的存取'
+                required:
+                  - success
+                  - message
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '伺服器內部錯誤'
+                required:
+                  - success
+                  - message

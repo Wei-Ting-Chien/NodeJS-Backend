@@ -1,0 +1,83 @@
+paths:
+  /posts/{id}:
+    delete:
+      tags:
+        - Post Management
+      summary: Delete Post
+      description: Delete a post (requires authentication and ownership)
+      operationId: deletePost
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Post ID
+          schema:
+            type: integer
+          example: 1
+      responses:
+        '200':
+          description: Post deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: '貼文刪除成功'
+                required:
+                  - success
+                  - message
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '未授權的存取'
+                required:
+                  - success
+                  - message
+        '404':
+          description: Not found - Post does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '貼文不存在'
+                required:
+                  - success
+                  - message
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '伺服器內部錯誤'
+                required:
+                  - success
+                  - message

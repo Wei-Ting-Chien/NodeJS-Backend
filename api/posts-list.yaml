@@ -1,0 +1,132 @@
+paths:
+  /posts:
+    get:
+      tags:
+        - Post Management
+      summary: Get All Posts
+      description: Get all posts with pagination, ordered by creation time (newest first)
+      operationId: getAllPosts
+      security: []
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Number of posts to return (default: 10, max: 100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          example: 15
+        - name: offset
+          in: query
+          required: false
+          description: Number of posts to skip (default: 0)
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          example: 0
+      responses:
+        '200':
+          description: Posts retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      posts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 1
+                            content:
+                              type: string
+                              example: 'Hello, this is my first post!'
+                            created_at:
+                              type: string
+                              format: date-time
+                              example: '2025-08-01T10:00:00.000Z'
+                            updated_at:
+                              type: string
+                              format: date-time
+                              example: '2025-08-01T10:00:00.000Z'
+                            author:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                  example: 1
+                                username:
+                                  type: string
+                                  example: 'johndoe'
+                                age:
+                                  type: integer
+                                  example: 25
+                                city:
+                                  type: string
+                                  example: 'Taipei'
+                            comments:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                    example: 1
+                                  content:
+                                    type: string
+                                    example: 'Great post!'
+                                  created_at:
+                                    type: string
+                                    format: date-time
+                                    example: '2025-08-01T10:30:00.000Z'
+                                  author:
+                                    type: object
+                                    properties:
+                                      username:
+                                        type: string
+                                        example: 'janesmith'
+                            likes_count:
+                              type: integer
+                              example: 3
+                      pagination:
+                        type: object
+                        properties:
+                          limit:
+                            type: integer
+                            example: 15
+                          offset:
+                            type: integer
+                            example: 0
+                          total:
+                            type: integer
+                            example: 25
+                required:
+                  - success
+                  - data
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '伺服器內部錯誤'
+                required:
+                  - success
+                  - message 

@@ -1,0 +1,82 @@
+paths:
+  /users/username/{username}:
+    get:
+      tags:
+        - User Management
+      summary: Get User by Username
+      description: Get public user information by username
+      operationId: getUserByUsername
+      security: []
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: Username to search for
+          schema:
+            type: string
+          example: 'johndoe'
+      responses:
+        '200':
+          description: User found successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      username:
+                        type: string
+                        example: 'johndoe'
+                      age:
+                        type: integer
+                        example: 25
+                      city:
+                        type: string
+                        example: 'Taipei'
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-08-01T10:00:00.000Z'
+                required:
+                  - success
+                  - data
+        '404':
+          description: Not found - User does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '用戶不存在'
+                required:
+                  - success
+                  - message
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '伺服器內部錯誤'
+                required:
+                  - success
+                  - message

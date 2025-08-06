@@ -1,0 +1,75 @@
+services:
+  app:
+    build: .
+    container_name: backend-app
+    env_file: .env
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - CREATE_TEST_DATA=${CREATE_TEST_DATA}
+    restart: always
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - app-network
+    command: >
+      sh -c "
+        echo 'Waiting for database ready.' &&
+        sleep 15 &&
+        echo 'Initializing database with Sequelize ORM.' &&
+        npm run init-db &&
+        echo 'Start Application.' &&
+        npm start
+      "
+
+  postgres-db:
+    image: postgres:16.4
+    container_name: postgres-db
+    env_file: .env
+    restart: always
+    volumes:
+      - ${PWD}/db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - '5432:5432'
+    networks:
+      - app-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER} -d ${DB_NAME}']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  pgadmin:
+    restart: always
+    container_name: pgadmin
+    image: dpage/pgadmin4:8.8
+    tty: true
+    stdin_open: true
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@demo.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin123456
+    volumes:
+      - ${PWD}/pgadmin-data:/var/lib/pgadmin
+    ports:
+      - '8888:80'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,129 @@
+paths:
+  /users/login:
+    post:
+      tags:
+        - User Management
+      summary: User Login
+      description: Authenticate user with email and password to get JWT token
+      operationId: loginUser
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: User email address
+                  example: 'johndoe@demo.com'
+                password:
+                  type: string
+                  description: User password
+                  example: '1qazxsw23edcvfr4'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: '登入成功'
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        description: JWT token for authentication
+                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          username:
+                            type: string
+                            example: 'johndoe'
+                          email:
+                            type: string
+                            example: 'johndoe@demo.com'
+                required:
+                  - success
+                  - message
+                  - data
+        '400':
+          description: Bad request - Invalid format or missing required fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '請求格式錯誤: 郵箱為必填項'
+                required:
+                  - success
+                  - message
+        '401':
+          description: Unauthorized - Invalid password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '帳號或密碼錯誤'
+                required:
+                  - success
+                  - message
+        '404':
+          description: Not found - Account does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Account does not exist'
+                required:
+                  - success
+                  - message
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: '伺服器內部錯誤'
+                required:
+                  - success
+                  - message

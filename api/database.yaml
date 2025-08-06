@@ -1,0 +1,351 @@
+paths:
+  /database/test:
+    get:
+      tags:
+        - Database
+      summary: Test Database Connection
+      description: Test the database connection and return connection status
+      operationId: testDatabaseConnection
+      security: []
+      responses:
+        '200':
+          description: Database connection successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  message:
+                    type: string
+                    example: 'Database connection successful'
+                  data:
+                    type: object
+                    properties:
+                      connected:
+                        type: boolean
+                        example: true
+                      version:
+                        type: string
+                        example: 'PostgreSQL 13.0'
+                required:
+                  - status
+                  - message
+                  - data
+        '500':
+          description: Database connection failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  message:
+                    type: string
+                    example: 'Database connection failed'
+                  error:
+                    type: string
+                    example: 'Connection timeout'
+                required:
+                  - status
+                  - message
+                  - error
+  /database/info:
+    get:
+      tags:
+        - Database
+      summary: Get Database Information
+      description: Get database connection information
+      operationId: getDatabaseInfo
+      security: []
+      responses:
+        '200':
+          description: Database information retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  message:
+                    type: string
+                    example: 'Database connection successful'
+                  data:
+                    type: object
+                    properties:
+                      host:
+                        type: string
+                        example: 'localhost'
+                      port:
+                        type: integer
+                        example: 5432
+                      database:
+                        type: string
+                        example: 'social_app'
+                      user:
+                        type: string
+                        example: 'postgres'
+                      dialect:
+                        type: string
+                        example: 'postgres'
+                required:
+                  - status
+                  - message
+                  - data
+        '500':
+          description: Failed to get database information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  message:
+                    type: string
+                    example: 'Database info failed'
+                  error:
+                    type: string
+                    example: 'Connection failed'
+                required:
+                  - status
+                  - message
+                  - error
+  /database/create-table:
+    post:
+      tags:
+        - Database
+      summary: Create Test Table
+      description: Create a test table in the database
+      operationId: createTestTable
+      security: []
+      responses:
+        '200':
+          description: Test table created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  message:
+                    type: string
+                    example: 'Test table created successfully'
+                required:
+                  - status
+                  - message
+        '500':
+          description: Failed to create test table
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  message:
+                    type: string
+                    example: 'Failed to create test table'
+                  error:
+                    type: string
+                    example: 'Permission denied'
+                required:
+                  - status
+                  - message
+                  - error
+  /database/insert-test-data:
+    post:
+      tags:
+        - Database
+      summary: Insert Test Data
+      description: Insert test data into the test table
+      operationId: insertTestData
+      security: []
+      responses:
+        '200':
+          description: Test data inserted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  message:
+                    type: string
+                    example: 'Test data inserted successfully'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: 'Test User 1704067200000'
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-08-01T10:00:00.000Z'
+                required:
+                  - status
+                  - message
+                  - data
+        '500':
+          description: Failed to insert test data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  message:
+                    type: string
+                    example: 'Failed to insert test data'
+                  error:
+                    type: string
+                    example: 'Table does not exist'
+                required:
+                  - status
+                  - message
+                  - error
+  /database/test-data:
+    get:
+      tags:
+        - Database
+      summary: Get Test Data
+      description: Retrieve test data from the test table
+      operationId: getTestData
+      security: []
+      responses:
+        '200':
+          description: Test data retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  message:
+                    type: string
+                    example: 'Test data retrieved successfully'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: 'Test User 1704067200000'
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: '2025-08-01T10:00:00.000Z'
+                required:
+                  - status
+                  - message
+                  - data
+        '500':
+          description: Failed to retrieve test data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  message:
+                    type: string
+                    example: 'Failed to retrieve test data'
+                  error:
+                    type: string
+                    example: 'Table does not exist'
+                required:
+                  - status
+                  - message
+                  - error
+  /database/stats:
+    get:
+      tags:
+        - Database
+      summary: Get Database Statistics
+      description: Get database statistics information
+      operationId: getDatabaseStats
+      security: []
+      responses:
+        '200':
+          description: Database statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'success'
+                  message:
+                    type: string
+                    example: 'Database stats retrieved successfully'
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        schemaname:
+                          type: string
+                          example: 'public'
+                        tablename:
+                          type: string
+                          example: 'users'
+                        attname:
+                          type: string
+                          example: 'id'
+                        n_distinct:
+                          type: number
+                          example: 10
+                        correlation:
+                          type: number
+                          example: 0.95
+                required:
+                  - status
+                  - message
+                  - data
+        '500':
+          description: Failed to retrieve database statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'error'
+                  message:
+                    type: string
+                    example: 'Failed to retrieve database stats'
+                  error:
+                    type: string
+                    example: 'Permission denied'
+                required:
+                  - status
+                  - message
+                  - error
