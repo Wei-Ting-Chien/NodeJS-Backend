@@ -12,13 +12,7 @@ const sequelize = new Sequelize(config.database.url, {
     idle: 10000, // 連接閒置時間 (毫秒)
   },
   dialectOptions: {
-    ssl:
-      config.app.env === 'production'
-        ? {
-          require: true,
-          rejectUnauthorized: false,
-        }
-        : false,
+    ssl: false
   },
 });
 
