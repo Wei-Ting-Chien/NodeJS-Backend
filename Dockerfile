@@ -10,10 +10,6 @@ WORKDIR /usr/src/app
 # 複製 package.json 和 package-lock.json
 COPY package*.json ./
 
-
-# 啟用正式環境、沒有測試的話用這行
-# RUN npm ci --only=production --ignore-scripts && npm cache clean --force
-
 # 啟用開發環境、要跑測試的話用這行
 RUN npm ci --ignore-scripts && npm cache clean --force
 
@@ -35,5 +31,9 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:3000/health || exit 1
 
-# 啟動應用程式
-CMD ["npm", "start"]
+# 創建啟動腳本
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# 使用啟動腳本
+ENTRYPOINT ["docker-entrypoint.sh"]
